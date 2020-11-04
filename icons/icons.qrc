@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>bitmap_icon.png</file>
+    <file>bitmap.png</file>
+    <file>addfile.png</file>
+    <file>closewin.png</file>
+    <file>deletefile.png</file>
+    <file>edit25.png</file>
+    <file>edit30.png</file>
+  </qresource>
+</RCC>
