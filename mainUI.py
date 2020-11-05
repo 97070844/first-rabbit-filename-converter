@@ -61,6 +61,8 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         self.menuTools = QtWidgets.QMenu(self.menubar)
         self.menuTools.setObjectName("menuTools")
+        self.menuView = QtWidgets.QMenu(self.menubar)
+        self.menuView.setObjectName("menuView")
         self.menuHelp = QtWidgets.QMenu(self.menubar)
         self.menuHelp.setObjectName("menuHelp")
         MainWindow.setMenuBar(self.menubar)
@@ -89,6 +91,12 @@ class Ui_MainWindow(object):
         self.actionQuit.setObjectName("actionQuit")
         self.actionAboutUs = QtWidgets.QAction(MainWindow)
         self.actionAboutUs.setObjectName("actionAboutUs")
+        self.actionView = QtWidgets.QAction(MainWindow)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("icons/closewin.png"),QtGui.QIcon.Normal,QtGui.QIcon.Off)
+        self.actionView.setIcon(icon4)
+        self.actionView.setObjectName("actionView")
+
         self.menuTools.addAction(self.actionAdd)
         self.menuTools.addAction(self.actionRemove)
         self.menuTools.addSeparator()
@@ -96,8 +104,10 @@ class Ui_MainWindow(object):
         #self.menuTools.addAction(self.actionRemoveFolder)
         self.menuTools.addSeparator()
         self.menuTools.addAction(self.actionQuit)
+        self.menuView.addAction(self.actionView)
         self.menuHelp.addAction(self.actionAboutUs)
         self.menubar.addAction(self.menuTools.menuAction())
+        self.menubar.addAction(self.menuView.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -114,6 +124,7 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(1, _translate("MainWindow", "Unicode to Zawgyi"))
         self.convertButton.setText(_translate("MainWindow", "Convert"))
         self.menuTools.setTitle(_translate("MainWindow", "File"))
+        self.menuView.setTitle(_translate("MainWindow","View"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
         self.actionAdd.setText(_translate("MainWindow", "Add File"))
         self.actionAdd.setShortcut(_translate("MainWindow", "Ctrl+A"))
@@ -124,6 +135,7 @@ class Ui_MainWindow(object):
         # self.actionRemoveFolder.setText(_translate("MainWindow", "Remove Folder"))
         # self.actionRemoveFolder.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
+        self.actionView.setText(_translate("MainWindow","View"))
         self.actionAboutUs.setText(_translate("MainWindow", "About Us"))
 
 # Create one instance as module-level usage.
