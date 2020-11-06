@@ -11,11 +11,15 @@ class Ui_MainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons/bitmap_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
+        #add, clear buttons and thier Hlayout
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(240, 20, 239, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+    
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -28,10 +32,14 @@ class Ui_MainWindow(object):
         self.clearAllButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.clearAllButton.setObjectName("Button")
         self.horizontalLayout.addWidget(self.clearAllButton)
+
+        #listwidget
         self.listWidget = QtWidgets.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(20, 70, 461, 211))
         self.listWidget.setIconSize(QtCore.QSize(15, 15))
         self.listWidget.setObjectName("listWidget")
+
+        #chosen combobox, its label & thier Hlayout
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setGeometry(QtCore.QRect(20, 300, 471, 40))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -47,15 +55,22 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.horizontalLayout_3.addWidget(self.comboBox)
+
+        #convert button
         self.convertButton = QtWidgets.QPushButton(self.centralwidget)
         self.convertButton.setGeometry(QtCore.QRect(370, 360, 111, 31))
         self.convertButton.setObjectName("Button")
+
+        #logo image
         self.image = QtWidgets.QLabel(self.centralwidget)
         self.image.setGeometry(QtCore.QRect(30, 10, 91, 51))
         self.image.setText("")
         self.image.setPixmap(QtGui.QPixmap("icons/bitmap.png"))
         self.image.setObjectName("image")
+
         MainWindow.setCentralWidget(self.centralwidget)
+
+        #create menubar & its sub-menu
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 21))
         self.menubar.setObjectName("menubar")
@@ -63,13 +78,19 @@ class Ui_MainWindow(object):
         self.menuTools.setObjectName("menuTools")
         self.menuView = QtWidgets.QMenu(self.menubar)
         self.menuView.setObjectName("menuView")
+        self.appearanceMenu = QtWidgets.QMenu("Appearance")
+        self.menuView.addMenu(self.appearanceMenu)
         self.menuHelp = QtWidgets.QMenu(self.menubar)
         self.menuHelp.setObjectName("menuHelp")
         MainWindow.setMenuBar(self.menubar)
+
+        #create statusbar
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         self.statusbar.setStyleSheet("QStatusBar{background-color: #363636;color: #FFF;}")
         MainWindow.setStatusBar(self.statusbar)
+        
+        #QActions
         self.actionAdd = QtWidgets.QAction(MainWindow)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("icons/addfile.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -82,8 +103,6 @@ class Ui_MainWindow(object):
         self.actionRemove.setObjectName("actionRemove")
         self.actionAddFolder = QtWidgets.QAction(MainWindow)
         self.actionAddFolder.setObjectName("actionAddFolder")
-        # self.actionRemoveFolder = QtWidgets.QAction(MainWindow)
-        # self.actionRemoveFolder.setObjectName("actionRemoveFolder")
         self.actionQuit = QtWidgets.QAction(MainWindow)
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("icons/closewin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -91,23 +110,23 @@ class Ui_MainWindow(object):
         self.actionQuit.setObjectName("actionQuit")
         self.actionAboutUs = QtWidgets.QAction(MainWindow)
         self.actionAboutUs.setObjectName("actionAboutUs")
-        self.actionView = QtWidgets.QAction(MainWindow)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("icons/closewin.png"),QtGui.QIcon.Normal,QtGui.QIcon.Off)
-        self.actionView.setIcon(icon4)
-        self.actionView.setObjectName("actionView")
+        self.actionDarkMode = QtWidgets.QAction(MainWindow)
+        self.actionDarkMode.setCheckable(True)
+        self.actionDarkMode.setObjectName("actionDarkMode")
 
+        #add QAction to thier coresponding menu
         self.menuTools.addAction(self.actionAdd)
         self.menuTools.addAction(self.actionRemove)
         self.menuTools.addSeparator()
         self.menuTools.addAction(self.actionAddFolder)
-        #self.menuTools.addAction(self.actionRemoveFolder)
         self.menuTools.addSeparator()
         self.menuTools.addAction(self.actionQuit)
-        self.menuView.addAction(self.actionView)
+        self.appearanceMenu.addAction(self.actionDarkMode)
         self.menuHelp.addAction(self.actionAboutUs)
+
+        #add sub-menu to menubar
         self.menubar.addAction(self.menuTools.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
+        self.menubar.addMenu(self.menuView)
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -132,10 +151,8 @@ class Ui_MainWindow(object):
         self.actionRemove.setShortcut(_translate("MainWindow", "Ctrl+R"))
         self.actionAddFolder.setText(_translate("MainWindow", "Add Folder"))
         self.actionAddFolder.setShortcut(_translate("MainWindow", "Ctrl+F"))
-        # self.actionRemoveFolder.setText(_translate("MainWindow", "Remove Folder"))
-        # self.actionRemoveFolder.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
-        self.actionView.setText(_translate("MainWindow","View"))
+        self.actionDarkMode.setText(_translate("MainWindow","Dark Mode"))
         self.actionAboutUs.setText(_translate("MainWindow", "About Us"))
 
 # Create one instance as module-level usage.

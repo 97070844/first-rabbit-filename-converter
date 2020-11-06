@@ -1,8 +1,12 @@
+"""
+Requirement
+-Python >3. (default 3.8.5)
+-PyQt5 (5.15.1)
+-Rabbit-master
+"""
+
 from mainUI import ui
-from PyQt5.QtWidgets import (QApplication,QMainWindow,QMessageBox,
-							QFileDialog,QListWidgetItem)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QThread, pyqtSignal, QObject, pyqtSlot,QSize
+from PyQt5 import QtWidgets,QtGui,QtCore
 from  dialog import ProgressDialog
 import sys,re,os,enum,time
 import lib.Rabbit as rabbit
@@ -10,18 +14,17 @@ import lib.extfile as _extfile
 
 style_sheet = """
     QWidget{
-        background-color: #121212;
+        background-color: #212121;
     }
 
     QLabel{
         color: #FFFFFF;
     }
 
-
     QComboBox{
-        background-color: #363636;
+        background-color: #363636; /*black pale*/
         color: #FFFFFF;
-        border: 0.1px solid white;
+        border: 1px solid white;
         height: 50px;
     }
 
@@ -29,12 +32,11 @@ style_sheet = """
         color:#FFFFFF;
         selection-background-color: #476d7c
     }
-
     
     QPushButton{
         background-color: #363636;
         color: #FFFFFF;
-        border: 0.1px solid white;
+        border: 1px solid white;
         padding: 5px;
     }
 
@@ -59,7 +61,6 @@ style_sheet = """
 
 """
 
-
 class TYPE(enum.Enum):
 	FILE = 0
 	FOLDER = 1
@@ -69,12 +70,12 @@ class ConvertMode(enum.IntEnum):
 	ZAW2UNI = 0
 	UNI2ZAW = 1
 
-class Worker(QThread):
+class Worker(QtCore.QThread):
 	"""
 	This class performs to convert fonts, using PyQt5 QThread mechanism.
 	"""
-	updateValueSignal = pyqtSignal(int)
-	updateTextEditSignal = pyqtSignal(str, str)
+	updateValueSignal = QtCore.pyqtSignal(int)
+	updateTextEditSignal = QtCore.pyqtSignal(str, str)
 
 	def __init__(self, files,cmode):
 		super().__init__()
@@ -100,24 +101,24 @@ class Worker(QThread):
 				os.rename(filename,uni_filename)
 				self.updateValueSignal.emit(i+1)
 				self.updateTextEditSignal.emit(filename,uni_filename)
-				time.sleep(4.0)
+				time.sleep(1.0)
 
 			if self.cmode == ConvertMode.UNI2ZAW:
 				zg_filename = rabbit.uni2zg(filename)
 				os.rename(filename,zg_filename)
 				self.updateValueSignal.emit(i+1)
 				self.updateTextEditSignal.emit(filename,zg_filename)
-				time.sleep(4.0)
+				time.sleep(1.0)
 
-class Main(QMainWindow):
+class Main(QtWidgets.QMainWindow):
+	files = list()
+	
 	def __init__(self):
 		super().__init__()
-		self.files = list()
 		self.initializeUI()
 
 	def initializeUI(self):
 		ui.setupUi(self)
-		#ui.centralwidget.setStyleSheet(style_sheet)
 		self.addSignals()
 
 	def addSignals(self):
@@ -131,7 +132,8 @@ class Main(QMainWindow):
 		ui.actionAddFolder.triggered.connect(self.addFolderItem)
 		ui.actionQuit.triggered.connect(self.exitDialog)
 		ui.actionAboutUs.triggered.connect(self.aboutDialog)
-
+		ui.actionDarkMode.triggered.connect(self.triggerTheme)
+		
 	def addFileItem(self):
 		filepath = self.openFileDialog() #return a list containing selected file(s)
 		if filepath:
@@ -175,9 +177,9 @@ class Main(QMainWindow):
 		if type == TYPE.SUBDIR:
 			imagepath = "icons/more.png"
 
-		listitem = QListWidgetItem()
+		listitem = QtWidgets.QListWidgetItem()
 		listitem.setText(filepath)
-		listitem.setIcon(QIcon(imagepath))
+		listitem.setIcon(QtGui.QIcon(imagepath))
 		ui.listWidget.addItem(listitem)
 
 	def clearItems(self):
@@ -190,11 +192,11 @@ class Main(QMainWindow):
 		self.files.pop(row)
 
 	def openFileDialog(self):
-		filepath, _ = QFileDialog.getOpenFileNames(self,"Add File","","All Files (*);;Text Files (*.txt)", options=QFileDialog.Options())
+		filepath, _ = QtWidgets.QFileDialog.getOpenFileNames(self,"Add File","","All Files (*);;Text Files (*.txt)", options=QtWidgets.QFileDialog.Options())
 		return filepath
 
 	def openFolderDialog(self):
-		folderpath = QFileDialog.getExistingDirectory(self,'Add Directory',"")
+		folderpath = QtWidgets.QFileDialog.getExistingDirectory(self,'Add Directory',"")
 		return folderpath
 
 	def convert(self):
@@ -211,7 +213,7 @@ class Main(QMainWindow):
 			self.worker = Worker(self.files,cmode)
 			self.worker.updateValueSignal.connect(self.updateProgressBar)
 			self.worker.updateTextEditSignal.connect(self.updateTextEdit)
-			self.worker.finished.connect(self.convertDone)
+			self.worker.finished.connect(self.convertFinished)
 			self.worker.start()
 
 	def updateProgressBar(self, value):
@@ -220,22 +222,31 @@ class Main(QMainWindow):
 	def updateTextEdit(self, old_text, new_text):
 		self.dialog.textEdit.append("[INFO] {} changed to {}.\n".format(old_text, new_text))
 
-	def convertDone(self):
+	def convertFinished(self):
 		self.dialog.hide()
-		QMessageBox.information(self,"Finished","Filename Convertion Finished!")
+		QtWidgets.QMessageBox.information(self,"Finished","Filename Convertion Finished!")
 		self.clearItems()
 
 	def aboutDialog(self):
-		QMessageBox.about(self, "About First Rabbit", "This software is developed for free usage. Owned by Thura Soe")
+		QtWidgets.QMessageBox.about(self, "About First Rabbit", "This program is free software: you can redistribute it and/or modify it.\nDeveloped and maintained by Thura Soe.")
 
 	def exitDialog(self):
-		choose = QMessageBox.question(self, "Exit", "Do you really want to quit?",QMessageBox.Yes | QMessageBox.No,QMessageBox.No)
-		if choose == QMessageBox.Yes:
+		choose = QtWidgets.QMessageBox.question(self, "Exit", "Do you really want to quit?",QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,QtWidgets.QMessageBox.No)
+		if choose == QtWidgets.QMessageBox.Yes:
 			self.close()
+
+	def triggerTheme(self,check):
+		global style_sheet
+		if check:
+			ui.centralwidget.setStyleSheet(style_sheet)
+			ui.image.setPixmap(QtGui.QPixmap("icons/bitmap1.png"))
+		else:
+			ui.centralwidget.setStyleSheet("")
+			ui.image.setPixmap(QtGui.QPixmap("icons/bitmap.png"))
 
 if __name__ == "__main__":
 
-	app = QApplication(sys.argv)
+	app = QtWidgets.QApplication(sys.argv)
 	mainwin = Main()
 	mainwin.show()
 	sys.exit(app.exec_())
