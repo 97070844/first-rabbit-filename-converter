@@ -240,9 +240,11 @@ class Main(QtWidgets.QMainWindow):
 		if check:
 			ui.centralwidget.setStyleSheet(style_sheet)
 			ui.image.setPixmap(QtGui.QPixmap("icons/bitmap1.png"))
+			ui.statusbar.setStyleSheet("QStatusBar{background-color: #363636;color: #FFF;}")
 		else:
 			ui.centralwidget.setStyleSheet("")
 			ui.image.setPixmap(QtGui.QPixmap("icons/bitmap.png"))
+			ui.statusbar.setStyleSheet("")
 
 if __name__ == "__main__":
 

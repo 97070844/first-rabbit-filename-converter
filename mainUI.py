@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         #create statusbar
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
-        self.statusbar.setStyleSheet("QStatusBar{background-color: #363636;color: #FFF;}")
+        
         MainWindow.setStatusBar(self.statusbar)
         
         #QActions
