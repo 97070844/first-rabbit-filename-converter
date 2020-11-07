@@ -189,7 +189,8 @@ class Main(QtWidgets.QMainWindow):
 	def removeItem(self):
 		row = ui.listWidget.currentRow()
 		ui.listWidget.takeItem(row)
-		self.files.pop(row)
+		if row >=0:
+			self.files.pop(row)
 
 	def openFileDialog(self):
 		filepath, _ = QtWidgets.QFileDialog.getOpenFileNames(self,"Add File","","All Files (*);;Text Files (*.txt)", options=QtWidgets.QFileDialog.Options())
@@ -200,7 +201,7 @@ class Main(QtWidgets.QMainWindow):
 		return folderpath
 
 	def convert(self):
-		if self.files or self.folders:
+		if self.files:
 			cmode = ui.comboBox.currentIndex()
 			filecount = len(self.files)
 			self.dialog = ProgressDialog()
@@ -224,7 +225,7 @@ class Main(QtWidgets.QMainWindow):
 
 	def convertFinished(self):
 		self.dialog.hide()
-		QtWidgets.QMessageBox.information(self,"Finished","Filename Convertion Finished!")
+		QtWidgets.QMessageBox.information(self,"Finished","Convertion Completed!")
 		self.clearItems()
 
 	def aboutDialog(self):
@@ -247,7 +248,6 @@ class Main(QtWidgets.QMainWindow):
 			ui.statusbar.setStyleSheet("")
 
 if __name__ == "__main__":
-
 	app = QtWidgets.QApplication(sys.argv)
 	mainwin = Main()
 	mainwin.show()

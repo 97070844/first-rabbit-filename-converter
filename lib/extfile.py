@@ -1,5 +1,5 @@
 """
-Python code to get a filetype (file extension) from a given filepath
+Python module to get a filetype (file extension) from a given filepath
 
 """
 
@@ -14,7 +14,7 @@ FILE_TYPES = {'image':['.ico','.jpeg','.png','.ai','.gif','.jpg','.svg','.bmp'],
 }
 
 
-#return filetype
+#return filetype as string
 def get_filetype(path):
     format = get_fileformat(path)
     for name,ext in FILE_TYPES.items():
@@ -30,18 +30,15 @@ def get_fileformat(path):
     #use regular expression
     #to get (.extension) from a filepath
     import re
-    format = re.search("\.\w+",path).group(0)
-    
+    format = re.search("(\.\w+)$",path).group(0)  
     return format
 
 
 
 ############### Example #############
 if __name__ == '__main__':
-    filepath = "E:\\user\Aj48\Desktop\folder\sample-(1).py"
-
+    filepath = r"E:/user/Aj48/Desktop/folder/sample-(1).py"
     filetype = get_filetype(filepath)
-
     print(filetype)
 
 

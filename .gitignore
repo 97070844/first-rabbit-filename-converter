@@ -1,5 +1,4 @@
 #git ignore file
 *.ui
-icons/
 ui/
 .txt
